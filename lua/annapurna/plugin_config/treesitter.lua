@@ -12,6 +12,7 @@ configs.setup({
     "html",
     "java",
     "javascript",
+    "jsdoc",
     "json",
     "ledger",
     "lua",
