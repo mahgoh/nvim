@@ -28,7 +28,7 @@ local plugins = {
   'mbbill/undotree',
   'goolord/alpha-nvim',
   'hoob3rt/lualine.nvim',
-  'github/copilot.vim',
+  -- 'github/copilot.vim',
   'wakatime/vim-wakatime',
   { 'akinsho/bufferline.nvim',       version = "*", },
   { 'nvim-telescope/telescope.nvim', tag = '0.1.4', },
