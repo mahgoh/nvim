@@ -17,7 +17,7 @@ require('mason-lspconfig').setup({
     'rust_analyzer',
     'sqlls',
     'tailwindcss',
-    'tsserver',
+    'ts_ls',
     'typst_lsp',
     'yamlls'
   },
