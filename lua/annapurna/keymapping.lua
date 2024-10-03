@@ -58,7 +58,7 @@ vim.keymap.set("n", "<leader>tp", function()
 end)
 
 -- Blame
-vim.keymap.set("n", "<leader>bt", "<CMD>GitBlameToggle<cr>")
+vim.keymap.set("n", "<leader>bt", "<CMD>Gitsigns toggle_current_line_blame<cr>")
 
 -- Go err nil
 vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>")

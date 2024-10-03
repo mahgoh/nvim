@@ -1,7 +1,6 @@
 require("annapurna.plugin_config.alpha")
 require("annapurna.plugin_config.bufferline")
 require("annapurna.plugin_config.colorscheme")
-require("annapurna.plugin_config.git_blame")
 require("annapurna.plugin_config.git_signs")
 require("annapurna.plugin_config.lualine")
 require("annapurna.plugin_config.lsp_zero")

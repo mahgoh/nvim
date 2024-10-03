@@ -9,7 +9,6 @@ local plugins = {
   'nvim-tree/nvim-web-devicons',
 
   -- Git
-  'f-person/git-blame.nvim',
   'lewis6991/gitsigns.nvim',
   'tpope/vim-fugitive',
   "sindrets/diffview.nvim",
