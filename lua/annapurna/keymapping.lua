@@ -4,6 +4,16 @@
 
 local opts = { noremap = true, silent = true }
 
+-- Small terminal
+vim.keymap.set("n", "<leader>st", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd("J")
+  vim.api.nvim_win_set_height(0, 15)
+end)
+-- exit with shift escape
+vim.keymap.set("t", "<S-Esc>", "<C-\\><C-n>")
+
 -- Move text up and down (Alt-j/k)
 vim.keymap.set("n", "∆", "<Esc>:m .-2<CR>==")
 vim.keymap.set("n", "º", "<Esc>:m .+1<CR>==")
@@ -45,18 +55,6 @@ vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 vim.keymap.set("n", "<leader>gdo", ":DiffviewOpen<CR>")
 vim.keymap.set("n", "<leader>gdc", ":DiffviewClose<CR>")
 
--- Trouble
-vim.keymap.set("n", "<leader>gr", "<CMD>TroubleToggle lsp_references<cr>")
-vim.keymap.set("n", "<leader>tt", function()
-  require("trouble").toggle()
-end)
-vim.keymap.set("n", "<leader>tn", function()
-  require("trouble").next({ skip_groups = true, jump = true })
-end)
-vim.keymap.set("n", "<leader>tp", function()
-  require("trouble").previous({ skip_groups = true, jump = true })
-end)
-
 -- Blame
 vim.keymap.set("n", "<leader>bt", "<CMD>Gitsigns toggle_current_line_blame<cr>")
 
@@ -76,20 +74,26 @@ vim.keymap.set("n", "<leader>os", vim.cmd.ObsidianSearch)
 vim.keymap.set("n", "<leader>heute", vim.cmd.ObsidianToday)
 vim.keymap.set("n", "<leader>geste", vim.cmd.ObsidianYesterday)
 
-vim.keymap.set("n", "<leader>A", ":Alpha<CR>")
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-vim.keymap.set("n", "<C-b>", ":Neotree filesystem toggle left<CR>")
+vim.keymap.set("n", "<leader>ds", vim.cmd.Neogen) -- describe
 
-local augroup = vim.api.nvim_create_augroup
-local Annapurna = augroup('Annapurna', {})
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('custom-lsp-attach', {}),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then return end
 
-local autocmd = vim.api.nvim_create_autocmd
+    if client.supports_method('textDocument/formatting') then
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        buffer = args.buf,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+        end
+      })
+    end
 
-autocmd('LspAttach', {
-  group = Annapurna,
-  callback = function(ev)
-    local opts = { buffer = ev.buf}
+    local opts = { buffer = args.buf }
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
@@ -98,13 +102,6 @@ autocmd('LspAttach', {
     vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-    vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format() end, opts)
+    vim.keymap.set("n", "<leader>bf", function() vim.lsp.buf.format() end, opts)
   end
 })
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-vim.keymap.set('n', '<leader>ps', function()
-  builtin.grep_string({ search = vim.fn.input("Grep > ") });
-end)

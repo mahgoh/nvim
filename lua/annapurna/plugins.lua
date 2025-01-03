@@ -1,50 +1,94 @@
 local plugins = {
   'folke/which-key.nvim',
-  'folke/trouble.nvim',
-  'folke/neodev.nvim',
+  {
+    'folke/trouble.nvim',
+    opts = {},
+    cmd = 'Trouble',
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    }
+
+  },
   { 'jokajak/keyseer.nvim',  version = false },
 
   -- Utilities
   'nvim-lua/plenary.nvim',
   'nvim-tree/nvim-web-devicons',
 
-  -- Git
+  -- Git & Files
   'lewis6991/gitsigns.nvim',
   'tpope/vim-fugitive',
-  "sindrets/diffview.nvim",
-
-  -- Files
+  'sindrets/diffview.nvim',
   'stevearc/oil.nvim',
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-    },
-  },
 
   -- Editor
   { 'numToStr/Comment.nvim', opts = {},      lazy = false },
   'mbbill/undotree',
-  'goolord/alpha-nvim',
   'hoob3rt/lualine.nvim',
-  -- 'github/copilot.vim',
   'wakatime/vim-wakatime',
-  { 'akinsho/bufferline.nvim',       version = "*", },
-  { 'nvim-telescope/telescope.nvim', tag = '0.1.4', },
-
-  "rebelot/kanagawa.nvim",
+  { 'akinsho/bufferline.nvim', version = "*", },
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.8',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }
+    },
+    config = function()
+      require('telescope').setup {
+        pickers = {
+          find_files = {
+            theme = "ivy"
+          }
+        },
+        extensions = {
+          fzf = {}
+        }
+      }
+
+      require('telescope').load_extension('fzf')
+
+      vim.keymap.set('n', '<leader>fd', require('telescope.builtin').find_files, {})
+      vim.keymap.set('n', '<leader>fg', require('telescope.builtin').git_files, {})
+      vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, {})
+      vim.keymap.set('n', '<leader>en', function()
+        require('telescope.builtin').find_files {
+          cwd = vim.fn.stdpath("config")
+        }
+      end)
+    end
   },
-  -- {
-  --   'lunarvim/synthwave84.nvim',
-  --   config = function()
-  --     vim.cmd('colorscheme synthwave84')
-  --   end
-  -- },
+
+  "oahlen/iceberg.nvim",
 
   {
     -- Highlight, edit, and navigate code
@@ -115,11 +159,12 @@ local plugins = {
 
       finder = "telescope.nvim",
     },
-    {
-      "nvim-neorg/neorg",
-      build = ":Neorg sync-parsers",
-      dependencies = "nvim-lua/plenary.nvim"
-    }
+  },
+
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = "nvim-lua/plenary.nvim"
   },
 
   -- {
@@ -141,6 +186,23 @@ local plugins = {
   -- end
   -- }
 
+
+  {
+    'mahgoh/radiant.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('radiant').setup()
+    end
+  },
+  -- Local Radiant repo
+  -- {
+  --   dir = "~/path/to/radiant.nvim", -- Your path
+  --   name = "radiant",
+  --   config = function()
+  --     require('radiant').setup()
+  --   end
+  -- },
+
   -- Games
   {
     'jim-fx/sudoku.nvim',
@@ -149,13 +211,10 @@ local plugins = {
       require("sudoku").setup({})
     end
   },
-  'alanfortlink/blackjack.nvim'
+  'alanfortlink/blackjack.nvim',
 
 }
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
