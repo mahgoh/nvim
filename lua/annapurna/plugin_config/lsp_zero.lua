@@ -18,7 +18,7 @@ require('mason-lspconfig').setup({
     'sqlls',
     'tailwindcss',
     'ts_ls',
-    'typst_lsp',
+    'tinymist',
     'yamlls'
   },
   handlers = {
