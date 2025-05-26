@@ -8,7 +8,7 @@ require('mason-lspconfig').setup({
     'clangd',
     'dockerls',
     'gopls',
-    'grammarly',
+    'harper_ls',
     'html',
     'java_language_server',
     'jsonls',
