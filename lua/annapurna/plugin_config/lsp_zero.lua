@@ -25,6 +25,16 @@ require('mason-lspconfig').setup({
     function(server_name)
       require("lspconfig")[server_name].setup {}
     end,
+    ["tinymist"] = function()
+      local lspconfig = require("lspconfig")
+      lspconfig.tinymist.setup {
+        settings = {
+          -- exportPdf = "onSave" -- generate on save
+          -- exportPdf = "onDocumentHasTitle" -- generate on save only if document has title (no template files)
+          exportPdf = "never"
+        }
+      }
+    end,
     ["lua_ls"] = function()
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup {
