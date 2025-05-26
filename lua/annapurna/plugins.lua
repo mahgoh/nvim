@@ -128,6 +128,7 @@ local plugins = {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
     lazy = false,
+    ft = "markdown",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
       -- Path to the vault directory
@@ -135,7 +136,7 @@ local plugins = {
 
       notes_subdir = "notes",
 
-      log_level = vim.log.levels.DEBUG,
+      log_level = vim.log.levels.INFO,
 
       -- Daily notes
       daily_notes = {
