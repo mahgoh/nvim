@@ -43,6 +43,7 @@ local plugins = {
   -- Utilities
   'nvim-lua/plenary.nvim',
   'nvim-tree/nvim-web-devicons',
+  'tjdevries/train.nvim',
 
   -- Git & Files
   'lewis6991/gitsigns.nvim',
